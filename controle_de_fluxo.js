@@ -1,5 +1,7 @@
 const numero1 = 100;
 const numero2 = 20;
+const numeroCorreto = 30;
+const stringDeNumero = '30';
 
 if (numero1 > 1) {
     console.log('Este número é maior que 1');
@@ -13,4 +15,12 @@ if (numero1 > 200) {
 
 if (numero2 <= numero1) {
     console.log(`${numero2} é menor ou igual a ${numero1}!`);
+}
+
+if (numeroCorreto == stringDeNumero) {
+    console.log('Os números são iguais em valor apenas (Podem ter ocorrido coerções).');
+}
+
+if (numeroCorreto === stringDeNumero) {
+    console.log('Os números são iguais em valor e tipo.');
 }
