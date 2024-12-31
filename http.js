@@ -7,12 +7,18 @@ const server = http.createServer((request, response) => {
     if (url === '/') {
         response.write(`<div><h1>Hello from Node!</h1><p>http virtual server</p></div>`);
         response.end();
+        return;
     }
 
     if (url === '/api/sports') {
         response.write(JSON.stringify(sports));
         response.end();
+        return;
     }
+    
+    response.statusCode = 404;
+    response.write(`<h1>Página não encontrada!</h1>`);
+    response.end();
 });
 
 server.listen(5000, 'localhost', () => {
