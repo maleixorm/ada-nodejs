@@ -1,4 +1,6 @@
+const url =  require('node:url');
 const querystring = require('node:querystring');
+const { parse } = require('node:path');
 
 const baseUrl = 'https://siteviagem.com.br';
 
@@ -7,14 +9,15 @@ const uri = querystring.stringify({
     periodo: 'Verão'
 });
 
-const url = `${baseUrl}/${uri}`;
+const fullUrl = `${baseUrl}/${uri}`;
 
-console.log(url);
+console.log(fullUrl);
 
 const parsedUri = querystring.parse(uri);
 console.log(uri);
 console.log(parsedUri);
 console.log(parsedUri.destino);
+console.log(url.parse(fullUrl));
 
 const uri2 = querystring.escape('São Paulo');
 console.log(uri2);
