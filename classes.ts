@@ -4,25 +4,40 @@ type Produto = {
 }
 
 class Estabelecimento {
-    public filaDeEspera: number;
+    private _filaDeEspera = 10;
     constructor(
         public endereco: string, 
         public setor: string, 
         private produtos: Produto[],
         filaDeEspera?: number
     ) {
-        this.filaDeEspera = filaDeEspera ?? 10
+        this.filaDeEspera = filaDeEspera ?? this._filaDeEspera;
     }
 
     retornaNomesDosProdutos() {
         return this.produtos.map(produto => produto.nome);
     }
 
-    diminuirFilaDeEspera() {
-        if (this.filaDeEspera === 0) {
+    
+    get filaDeEspera() {
+        return this._filaDeEspera;
+    }
+
+    
+    set filaDeEspera(fila : number) {
+        if (fila <= 0) {
             return;
         }
-        this.filaDeEspera--;
+        this._filaDeEspera = fila;
+    }
+    
+    
+
+    diminuirFilaDeEspera() {
+        if (this._filaDeEspera === 0) {
+            return;
+        }
+        this._filaDeEspera--;
     }
 }
 
@@ -47,7 +62,7 @@ const padaria2 = new Estabelecimento('Rua dos Abacates, 1120 - bloco A', 'alimen
     {nome: 'leite', valor: 4.69}, 
     {nome:'brigadeiro', valor: 2.25},
     {nome: 'café-da-manhã', valor: 19.9}
-], 3);
+], -3);
 
 const padaria3 = new Estabelecimento('Rua dos Ipês, 920 - bloco B', 'alimentação', [
     {nome: 'pão', valor: 1.5},
@@ -55,7 +70,7 @@ const padaria3 = new Estabelecimento('Rua dos Ipês, 920 - bloco B', 'alimentaç
     {nome: 'leite', valor: 5.29}, 
     {nome:'brigadeiro', valor: 2},
     {nome: 'café-da-manhã', valor: 25}
-], 27);
+], 20);
 
 console.log(padaria);
 console.log(padaria.retornaNomesDosProdutos());
@@ -65,6 +80,7 @@ padaria2.diminuirFilaDeEspera();
 padaria2.diminuirFilaDeEspera();
 padaria2.diminuirFilaDeEspera();
 padaria2.diminuirFilaDeEspera();
+padaria3.filaDeEspera = -20;
 console.log(padaria3.filaDeEspera);
 console.log(padaria2.endereco);
 console.log(padaria2.filaDeEspera);
