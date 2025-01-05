@@ -53,6 +53,16 @@ const padaria = {
     ],
     retornaNomesDosProdutos() {
         return this.produtos.map(produto => produto.nome);
+    },
+    _filaDeEspera: 5,
+    get filaDeEspera() {
+        return this._filaDeEspera;
+    }, 
+    set filaDeEspera(fila : number) {
+        if (fila <= 0) {
+            return;
+        }
+        this._filaDeEspera = fila;
     }
 }
 
