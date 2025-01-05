@@ -1,9 +1,9 @@
-type Produto = {
+export type Produto = {
     nome: string,
     valor: number
 }
 
-class Estabelecimento {
+class EstabelecimentoBase {
     private _filaDeEspera = 10;
     constructor(
         public endereco: string, 
@@ -66,7 +66,7 @@ const padaria = {
     }
 }
 
-const padaria2 = new Estabelecimento('Rua dos Abacates, 1120 - bloco A', 'alimentação', [
+const padaria2 = new EstabelecimentoBase('Rua dos Abacates, 1120 - bloco A', 'alimentação', [
     {nome: 'pão', valor: 1.15},
     {nome: 'rosca', valor: 12.9}, 
     {nome: 'leite', valor: 4.69}, 
@@ -74,7 +74,7 @@ const padaria2 = new Estabelecimento('Rua dos Abacates, 1120 - bloco A', 'alimen
     {nome: 'café-da-manhã', valor: 19.9}
 ], -3);
 
-const padaria3 = new Estabelecimento('Rua dos Ipês, 920 - bloco B', 'alimentação', [
+const padaria3 = new EstabelecimentoBase('Rua dos Ipês, 920 - bloco B', 'alimentação', [
     {nome: 'pão', valor: 1.5},
     {nome: 'rosca', valor: 9.9}, 
     {nome: 'leite', valor: 5.29}, 
