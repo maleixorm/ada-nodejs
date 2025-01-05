@@ -9,12 +9,19 @@ interface EstabelecimentoInterface {
 }
 
 interface FarmaciaInteface extends EstabelecimentoInterface {
-    compraRemedioPrescrito: (receita: ReceitaInterface) => void;
+    compraRemedioPrescrito: (
+        receita: ReceitaInterface, 
+        produtosAComprar: string[]
+    ) => void;
 }
 
 interface ReceitaInterface {
     remedios: string[];
     identificacaoDoMedico: string;
+}
+
+interface Remedio extends Produto {
+    receitaObrigatoria?: boolean;
 }
 
 class Estabelecimento implements EstabelecimentoInterface {
@@ -55,15 +62,24 @@ class Farmacia extends Estabelecimento implements FarmaciaInteface {
     constructor(
         public endereco: string, 
         public setor: string, 
-        protected produtos: Produto[],
+        protected produtos: Remedio[],
         filaDeEspera?: number
     ) {
         super(endereco, setor, produtos, filaDeEspera);
     }
 
-    public compraRemedioPrescrito(receita: ReceitaInterface): void {
-        const nomeDosRemediosReceitados = receita.remedios;
-        const remediosDisponiveis = this.retornaNomesDosProdutos().filter(produto => nomeDosRemediosReceitados.includes(produto));
+    public compraRemedioPrescrito(receita: ReceitaInterface, produtosAComprar: string[]): void {
+        
+        const remediosDisponiveis = this.produtos.filter(produto => produtosAComprar.includes(produto.nome));
+        const remediosAutorizados = remediosDisponiveis.filter(
+            produto => !produto.receitaObrigatoria ? true : receita.remedios.includes(produto.nome));   
+
+        if (remediosDisponiveis.length === 0) {
+            console.log('Infelizmente não temos os produtos em estoque!')
+        }
+
+        console.log({remediosDisponiveis});
+        console.log({remediosAutorizados});
     };
 }
 
@@ -74,3 +90,22 @@ const supermercado = new Estabelecimento('Rua dos Ipês, 920 - bloco B', 'alimen
     {nome:'brigadeiro', valor: 2},
     {nome: 'café-da-manhã', valor: 25}
 ], 25);
+
+const farmaciaDoZe = new Farmacia(
+    'Rua dos Jatobás, 2220 - bloco J', 
+    'saúde', 
+    [
+        {nome: 'aspirina', valor: 3.99},
+        {nome: 'dorflex', valor: 9.9}, 
+        {nome: 'lorax', valor: 15.29, receitaObrigatoria: true}, 
+        {nome: 'lexotan', valor: 12.79, receitaObrigatoria: true}, 
+        {nome:'loratadina', valor: 5.99},
+        {nome: 'multivitamínico', valor: 35}
+    ], 
+25);
+
+supermercado.retornaNomesDosProdutos();
+farmaciaDoZe.compraRemedioPrescrito({
+    remedios: ['lorax'],
+    identificacaoDoMedico: '123-456-111'
+}, ['aspirina', 'lexotan', 'shampoo']);
