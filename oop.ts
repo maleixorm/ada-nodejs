@@ -8,12 +8,21 @@ interface EstabelecimentoInterface {
     diminuirFilaDeEspera(): void;
 }
 
+interface FarmaciaInteface extends EstabelecimentoInterface {
+    compraRemedioPrescrito: (receita: ReceitaInterface) => void;
+}
+
+interface ReceitaInterface {
+    remedios: string[];
+    identificacaoDoMedico: string;
+}
+
 class Estabelecimento implements EstabelecimentoInterface {
-    private _filaDeEspera = 10;
+    protected _filaDeEspera = 10;
     constructor(
         public endereco: string, 
         public setor: string, 
-        private produtos: Produto[],
+        protected produtos: Produto[],
         filaDeEspera?: number
     ) {
         this.filaDeEspera = filaDeEspera ?? this._filaDeEspera;
@@ -23,12 +32,10 @@ class Estabelecimento implements EstabelecimentoInterface {
         return this.produtos.map(produto => produto.nome);
     }
 
-    
     get filaDeEspera() {
         return this._filaDeEspera;
     }
-
-    
+   
     set filaDeEspera(fila : number) {
         if (fila <= 0) {
             return;
@@ -36,14 +43,28 @@ class Estabelecimento implements EstabelecimentoInterface {
         this._filaDeEspera = fila;
     }
     
-    
-
     diminuirFilaDeEspera() {
         if (this._filaDeEspera === 0) {
             return;
         }
         this._filaDeEspera--;
     }
+}
+
+class Farmacia extends Estabelecimento implements FarmaciaInteface {
+    constructor(
+        public endereco: string, 
+        public setor: string, 
+        protected produtos: Produto[],
+        filaDeEspera?: number
+    ) {
+        super(endereco, setor, produtos, filaDeEspera);
+    }
+
+    public compraRemedioPrescrito(receita: ReceitaInterface): void {
+        const nomeDosRemediosReceitados = receita.remedios;
+        const remediosDisponiveis = this.retornaNomesDosProdutos().filter(produto => nomeDosRemediosReceitados.includes(produto));
+    };
 }
 
 const supermercado = new Estabelecimento('Rua dos Ipês, 920 - bloco B', 'alimentação', [
